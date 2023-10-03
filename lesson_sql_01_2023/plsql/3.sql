@@ -3,6 +3,9 @@ CREATE OR REPLACE PROCEDURE GET_TABLE_LIST_03(
     R_NAME OUT VARCHAR2,
     R_EMAIL OUT VARCHAR2
 ) IS
+ ------------------------------------------------
+ -------------- cursor ,  fetch ,  レコード　使用
+ ------------------------------------------------
     CURSOR P_CURSOR IS
         SELECT
             *
