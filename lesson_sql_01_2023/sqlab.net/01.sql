@@ -1,3 +1,64 @@
+-------------------------------------------------------------------------------------
+----------------- （下の問題を、副問い合わせ（サブクエリーで書いた例 ））
+----------------- 店舗毎の書籍の売上(PRICE × FIGURE)を取得してください。また、店舗名は昇順に並び替えてください。
+--------- 出力項目はNAME(店舗名)とSALES(売上)です。
+SELECT
+    STORES.NAME AS NAME,
+    (
+        SELECT
+            SUM(BOOK_SALES.PRICE * BOOK_SALES.FIGURE)
+        FROM
+            BOOK_SALES
+        WHERE
+            BOOK_SALES.STORE_ID = STORES.ID
+    ) AS SALES
+FROM
+    STORES
+ORDER BY
+    NAME;
+
+----------------- 店舗毎の書籍の売上(PRICE × FIGURE)を取得してください。また、店舗名は昇順に並び替えてください。
+--------- 出力項目はNAME(店舗名)とSALES(売上)です。
+SELECT
+    STORES.NAME                               AS NAME,
+    SUM(BOOK_SALES.PRICE * BOOK_SALES.FIGURE) SALES
+FROM
+    STORES
+    JOIN BOOK_SALES
+    ON BOOK_SALES.STORE_ID = STORES.ID
+GROUP BY
+    NAME
+ORDER BY
+    NAME;
+
+-------------------------------------------------------------------------------------
+
+
+----------------- 在庫がない書籍名の一覧を取得してください。
+--------- 出力項目はNAME(書籍名)です。
+SELECT
+    NAME
+FROM
+    BOOKS
+    JOIN BOOK_SALES
+    ON BOOK_SALES.BOOK_ID = BOOKS.ID
+GROUP BY
+    NAME
+HAVING
+    SUM(BOOK_SALES.STOCK) = 0;
+
+----------------- 性別毎の著者数を取得してください。また、著者数は降順に並び替えてください。
+--------- 出力項目はgender(性別)とnum(著者数)です。
+SELECT
+    GENDER,
+    COUNT(ID) AS NUM
+FROM
+    AUTHORS
+GROUP BY
+    GENDER
+ORDER BY
+    NUM DESC;
+
 --------------------- （結合）　書籍テーブルと著者テーブルを結合
 --------- 出力項目はBOOK_NAME(書籍名)とAUTHOR_NAME(著者名)です。
 SELECT
