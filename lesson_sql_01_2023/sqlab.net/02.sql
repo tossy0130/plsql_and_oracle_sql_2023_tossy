@@ -1,3 +1,70 @@
+----- 複数のカテゴリーに属している書籍名の一覧を取得してください。
+----- 出力項目はNAME(書籍名)です。
+SELECT
+    BOOKS.NAME
+FROM
+    BOOKS
+    JOIN BOOK_CATEGORIES
+    ON BOOK_CATEGORIES.BOOK_ID = BOOKS.ID JOIN CATEGORIES
+    ON BOOK_CATEGORIES.CATEGORY_ID = CATEGORIES.ID
+GROUP BY
+    BOOKS.NAME
+HAVING
+    COUNT(BOOKS.NAME) >= 2;
+
+---- 出版タイトル数が多い著者TOP3を取得してください。また、著者名は昇順で並び替えてください。
+---- 出力項目はNAME(著者名)とPUBLISHED_TITLE_NUM(出版タイトル数)です。
+
+SELECT
+    AUTHORS.NAME,
+    COUNT(*)     AS PUBLISHED_TITLE_NUM
+FROM
+    BOOK_AUTHORS
+    JOIN BOOKS
+    ON BOOK_AUTHORS.BOOK_ID = BOOKS.ID JOIN AUTHORS
+    ON BOOK_AUTHORS.AUTHOR_ID = AUTHORS.ID
+GROUP BY
+    AUTHORS.NAME
+ORDER BY
+    PUBLISHED_TITLE_NUM DESC LIMIT 3;
+
+---- 売上が多いカテゴリーTOP3を取得してください。売上はPRICE × FIGUREで求められます。
+---- 出力項目はNAME(カテゴリー名)とSALES(売上)です。
+
+SELECT
+    CATEGORIES.NAME,
+    SUM(BOOK_SALES.PRICE * BOOK_SALES.FIGURE ) AS SALES
+FROM
+    BOOKS
+    JOIN BOOK_SALES
+    ON BOOK_SALES.BOOK_ID = BOOKS.ID JOIN BOOK_CATEGORIES
+    ON BOOK_CATEGORIES.BOOK_ID = BOOKS.ID
+    JOIN CATEGORIES
+    ON CATEGORIES.ID = BOOK_CATEGORIES.CATEGORY_ID
+GROUP BY
+    CATEGORIES.NAME
+ORDER BY
+    SALES DESC LIMIT 3;
+
+--- オンラインのみで購入できる書籍名の一覧を取得してください。
+--- 出力項目はNAME(書籍名)です。
+SELECT
+    NAME
+FROM
+    BOOKS
+WHERE
+    ID NOT IN (
+        SELECT
+            DISTINCT BOOKS.ID
+        FROM
+            BOOKS
+            JOIN BOOK_SALES
+            ON BOOKS.ID = BOOK_SALES.BOOK_ID JOIN STORES
+            ON BOOK_SALES.STORE_ID = STORES.ID
+        WHERE
+            STORES.NAME <> 'オンライン'
+    );
+
 ----------------- 書籍名と価格、消費税の一覧を取得してください。
 --------- 出力項目はNAME(書籍名)とPRICE(価格)、TAX(消費税)です。
 SELECT

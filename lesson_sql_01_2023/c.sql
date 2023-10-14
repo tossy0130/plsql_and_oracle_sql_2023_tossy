@@ -1,3 +1,41 @@
+-- ********* 問21
+------- 年齢ごとの選手数を表
+-------5歳毎に合算して表示
+
+/*
+ 
+ 【ロジック　解説】
+1: TIMESTAMPDIFF関数で年齢を算出→例1）19、例2）16
+2: 上記の答えを5で割る→例1）3.8、例2）3.2
+3: 小数点以下を切り捨てる→例1）3、例2）3
+4: 5倍して年齢（5歳毎になっている）に戻す→例1）15、例2）15
+ 
+ */
+SELECT
+    ABS(FLOOR(EXTRACT(YEAR FROM AGE(BIRTH, '2014-06-13')) / 5) * 5) AS AGE_GROUP,
+    COUNT(ID)                                                       AS PLAYER_COUNT
+FROM
+    PLAYERS
+GROUP BY
+    AGE_GROUP
+ORDER BY
+    AGE_GROUP;
+
+----------------- ********* END 問21
+
+-- ********* 問20
+------- 年齢ごとの選手数を表
+-------10歳毎に合算して表示
+SELECT
+    ABS(FLOOR(EXTRACT(YEAR FROM AGE(BIRTH, '2014-06-13')) / 10) * 10) AS AGE_GROUP,
+    COUNT(ID)                                                         AS PLAYER_COUNT
+FROM
+    PLAYERS
+GROUP BY
+    AGE_GROUP
+ORDER BY
+    AGE_GROUP;
+
 -- ********* 問19
 ------- 年齢ごとの選手数を表示
 ------- 年齢はワールドカップ開催当時である2014-06-13を使って算出
